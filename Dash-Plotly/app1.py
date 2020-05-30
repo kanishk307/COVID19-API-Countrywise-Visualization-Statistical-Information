@@ -56,7 +56,8 @@ df= pd.DataFrame({
 f = open("demofile2.txt", "r")
 country_name = f.read()
 print(country_name)
-
+# script_fn = 'app1.py'
+# exec(open(script_fn).read())
 
 url_complete_status = f"https://api.covid19api.com/total/dayone/country/{country_name}"
 stats_since_day_one = requests.get(url_complete_status)
@@ -238,7 +239,7 @@ dcc.Dropdown(
                     {'x': date_objects, 'y': active_list, 'type': 'scatter'},
                 ],
                 'layout': {
-                    'title': f'Active Cases in {country_name_final_representation} || Total active cases: {total_active_cases:n} || Active: {percent_active:n}% ',
+                    'title': f'Active Cases in {country_name_final_representation} || Total active cases: {total_active_cases:n} ',
                     'xaxis':{
                         'title':'Date'
                     },
@@ -256,7 +257,7 @@ dcc.Dropdown(
                     {'x': date_objects, 'y': deaths_list, 'type': 'scatter'},
                 ],
                 'layout': {
-                    'title': f'Deaths in {country_name_final_representation} || Total deaths: {total_deaths:n} || Deaths: {percent_death:n}% ',
+                    'title': f'Deaths in {country_name_final_representation} || Total deaths: {total_deaths:n} ',
                     'xaxis':{
                         'title':'Date'
                     },
@@ -274,7 +275,7 @@ dcc.Dropdown(
                     {'x': date_objects, 'y': recovered_list, 'type': 'scatter'},
                 ],
                 'layout': {
-                    'title': f'Recoveries in {country_name_final_representation} || Total recovered:  {total_recovered:n} || Recoveries: {percent_recovered:n}% ',
+                    'title': f'Recoveries in {country_name_final_representation} || Total recovered:  {total_recovered:n} ',
                     'xaxis':{
                         'title':'Date'
                     },
