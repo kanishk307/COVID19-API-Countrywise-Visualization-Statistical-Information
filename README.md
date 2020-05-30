@@ -3,4 +3,6 @@ Countrywise (based on user input) information of various aspects related to COVI
 
 Google Colab iPython Notebook link: https://colab.research.google.com/drive/1iXVs1rQ4IHW5q7jU-rYsFQKZO2Ccq9bu
 
+The Dash-Plotly folder contains the web dashboard code.
+
 Click on 'Open in Playground' to execute the notebook.
