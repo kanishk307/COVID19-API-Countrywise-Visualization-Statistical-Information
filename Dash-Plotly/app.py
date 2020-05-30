@@ -21,7 +21,8 @@ import pandas as pd
 from collections import OrderedDict
 import dash_table
 from dash.dependencies import Input, Output, State
-
+import sys
+import subprocess
 
 
 locale.setlocale(locale.LC_ALL, 'en_US')
@@ -56,7 +57,6 @@ df= pd.DataFrame({
 f = open("demofile2.txt", "r")
 country_name = f.read()
 print(country_name)
-
 
 url_complete_status = f"https://api.covid19api.com/total/dayone/country/{country_name}"
 stats_since_day_one = requests.get(url_complete_status)
@@ -148,7 +148,6 @@ past_24_hours_active_cases = change_past_24_hours(active_list)
 past_24_hours_deaths = change_past_24_hours(deaths_list)
 past_24_hours_recovered = change_past_24_hours(recovered_list)
 
-
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(
@@ -157,146 +156,162 @@ app = dash.Dash(
 
 app.scripts.config.serve_locally = True
 
-app.layout = html.Div(children=[
-dcc.Dropdown(
-            id='dropdown',
-            options=[
-                {'label':i, 'value':i} for i in df['c'].unique()
-            ],
-        value = ''
-        ),
-    html.Div(id='output'),
-        html.Div(id='dd-output-container'),
-        
-    html.H1(children=f"Statistics for {country_name_final_representation}"),
+def openfile2(country_name):
+    f2 = open("demofile3.txt", "w")
+    f2.write(country_name)
+    f2.close()
 
-    html.Div(
-        [
-            dbc.Row(
-                [
-                    dbc.Col(html.Div(children = [html.H4(f'Past 24 hours (1 day)'),
-                                     html.P(f'Confirmed Cases - {past_24_hours_confirmed_cases:n}'),
-                                     html.P(f'Active Cases - {past_24_hours_active_cases:n}'),
-                                     html.P(f'Deaths - {past_24_hours_deaths:n}'),
-                                     html.P(f'Recovered - {past_24_hours_recovered:n}')
-                                     ])),
-                    dbc.Col(html.Div(children=[html.H4(f'All time'),
-                                               html.P(f'Total Confirmed Cases - {total_confirmed_cases:n}'),
-                                               html.P(f'Total Active Cases - {total_active_cases:n}'),
-                                               html.P(f'Total Deaths - {total_deaths:n}'),
-                                               html.P(f'Total Recovered - {total_recovered:n}'),
-                                               html.P(f'Active Percentage - {percent_active:n}%'),
-                                               html.P(f'Death Percentage - {percent_death:n}%'),
-                                               html.P(f'Recovery Percentage - {percent_recovered}%'),
-                                               html.P(f'First Case Reported - {first_case_reported}'),
-                                               html.P(f'Days since First Case - {days_since_first_case:n}'),
-                                               html.P(f'Average Cases Per Day - {avg_cases_per_day:n}'),
-                                               html.P(f'Average Deaths Per Day - {avg_deaths_per_day:n}'),
-                                               html.P(f'Average Recoveries Per Day - {avg_recoveries_per_day:n}'),
-                                               html.P(f'Maximum one day increase in confirmed cases - {max_one_day_increase_confirmed_cases:n}'),
-                                               html.P(f'Maximum one day increase in deaths - {max_one_day_increase_deaths:n}'),
-                                               html.P(f'Maximum one day increase in recoveries - {max_one_day_increase_recovered:n}')
-                                               ])),
-                    dbc.Col(html.Div(children=[html.H4(f'Past 14 days (2 weeks)'),
-                                               html.P(f'Confirmed Cases - {confirmed_cases_14_days:n}'),
-                                               html.P(f'Active Cases - {active_cases_14_days:n}'),
-                                               html.P(f'Deaths - {deaths_14_days:n}'),
-                                               html.P(f'Recoveries - {recovered_14_days:n}'),
-                                               html.P(f'Average Cases Per Day - {avg_cases_per_day_14_days:n}'),
-                                               html.P(f'Average Deaths Per Day - {avg_deaths_per_day_14_days:n}'),
-                                               html.P(f'Average Recoveries Per Day - {avg_recoveries_per_day_14_days:n}')
-                                               ])),
-                ]
+openfile2(country_name)
+
+f2 = open("demofile3.txt", "r")
+country_name2 = f2.read()
+print(country_name2)
+# country_name2 = f2.read()
+# print(country_name2)
+# f2.close()
+
+def html_view():
+    app.layout = html.Div(children=[
+    dcc.Dropdown(
+                id='dropdown',
+                options=[
+                    {'label':i, 'value':i} for i in df['c'].unique()
+                ],
+            value = ''
             ),
-        ]
-    ),
+        html.Div(id='output'),
+            html.Div(id='dd-output-container'),
+            
+        html.H1(children=f"Statistics for {country_name_final_representation}"),
+
+        html.Div(
+            [
+                dbc.Row(
+                    [
+                        dbc.Col(html.Div(children = [html.H4(f'Past 24 hours (1 day)'),
+                                        html.P(f'Confirmed Cases - {past_24_hours_confirmed_cases:n}'),
+                                        html.P(f'Active Cases - {past_24_hours_active_cases:n}'),
+                                        html.P(f'Deaths - {past_24_hours_deaths:n}'),
+                                        html.P(f'Recovered - {past_24_hours_recovered:n}')
+                                        ])),
+                        dbc.Col(html.Div(children=[html.H4(f'All time'),
+                                                html.P(f'Total Confirmed Cases - {total_confirmed_cases:n}'),
+                                                html.P(f'Total Active Cases - {total_active_cases:n}'),
+                                                html.P(f'Total Deaths - {total_deaths:n}'),
+                                                html.P(f'Total Recovered - {total_recovered:n}'),
+                                                html.P(f'Active Percentage - {percent_active:n}%'),
+                                                html.P(f'Death Percentage - {percent_death:n}%'),
+                                                html.P(f'Recovery Percentage - {percent_recovered}%'),
+                                                html.P(f'First Case Reported - {first_case_reported}'),
+                                                html.P(f'Days since First Case - {days_since_first_case:n}'),
+                                                html.P(f'Average Cases Per Day - {avg_cases_per_day:n}'),
+                                                html.P(f'Average Deaths Per Day - {avg_deaths_per_day:n}'),
+                                                html.P(f'Average Recoveries Per Day - {avg_recoveries_per_day:n}'),
+                                                html.P(f'Maximum one day increase in confirmed cases - {max_one_day_increase_confirmed_cases:n}'),
+                                                html.P(f'Maximum one day increase in deaths - {max_one_day_increase_deaths:n}'),
+                                                html.P(f'Maximum one day increase in recoveries - {max_one_day_increase_recovered:n}')
+                                                ])),
+                        dbc.Col(html.Div(children=[html.H4(f'Past 14 days (2 weeks)'),
+                                                html.P(f'Confirmed Cases - {confirmed_cases_14_days:n}'),
+                                                html.P(f'Active Cases - {active_cases_14_days:n}'),
+                                                html.P(f'Deaths - {deaths_14_days:n}'),
+                                                html.P(f'Recoveries - {recovered_14_days:n}'),
+                                                html.P(f'Average Cases Per Day - {avg_cases_per_day_14_days:n}'),
+                                                html.P(f'Average Deaths Per Day - {avg_deaths_per_day_14_days:n}'),
+                                                html.P(f'Average Recoveries Per Day - {avg_recoveries_per_day_14_days:n}')
+                                                ])),
+                    ]
+                ),
+            ]
+        ),
 
 
 
-    dcc.Graph(
-        id='confirmed-cases-graph',
-        figure={
-            'data': [
-                {'x': date_objects, 'y': confirmed_list, 'type': 'scatter'},
-            ],
-            'layout': {
-                'title': f'Confirmed Cases in {country_name_final_representation} || Total confirmed cases: {total_confirmed_cases:n} ',
-                'xaxis':{
-                    'title':'Date'
-                },
-                'yaxis':{
-                     'title':'Confirmed Cases'
-                }
-            }
-        }
-    ),
-
-    dcc.Graph(
-            id='active-cases-graph',
+        dcc.Graph(
+            id='confirmed-cases-graph',
             figure={
                 'data': [
-                    {'x': date_objects, 'y': active_list, 'type': 'scatter'},
+                    {'x': date_objects, 'y': confirmed_list, 'type': 'scatter'},
                 ],
                 'layout': {
-                    'title': f'Active Cases in {country_name_final_representation} || Total active cases: {total_active_cases:n} || Active: {percent_active:n}% ',
+                    'title': f'Confirmed Cases in {country_name_final_representation} || Total confirmed cases: {total_confirmed_cases:n} ',
                     'xaxis':{
                         'title':'Date'
                     },
                     'yaxis':{
-                         'title':'Active Cases'
+                        'title':'Confirmed Cases'
                     }
                 }
             }
         ),
 
-    dcc.Graph(
-            id='death-graph',
-            figure={
-                'data': [
-                    {'x': date_objects, 'y': deaths_list, 'type': 'scatter'},
-                ],
-                'layout': {
-                    'title': f'Deaths in {country_name_final_representation} || Total deaths: {total_deaths:n} || Deaths: {percent_death:n}% ',
-                    'xaxis':{
-                        'title':'Date'
-                    },
-                    'yaxis':{
-                         'title':'Total Deaths'
+        dcc.Graph(
+                id='active-cases-graph',
+                figure={
+                    'data': [
+                        {'x': date_objects, 'y': active_list, 'type': 'scatter'},
+                    ],
+                    'layout': {
+                        'title': f'Active Cases in {country_name_final_representation} || Total active cases: {total_active_cases:n} || Active: {percent_active:n}% ',
+                        'xaxis':{
+                            'title':'Date'
+                        },
+                        'yaxis':{
+                            'title':'Active Cases'
+                        }
                     }
                 }
-            }
-        ),
+            ),
 
-    dcc.Graph(
-            id='recovered-graph',
-            figure={
-                'data': [
-                    {'x': date_objects, 'y': recovered_list, 'type': 'scatter'},
-                ],
-                'layout': {
-                    'title': f'Recoveries in {country_name_final_representation} || Total recovered:  {total_recovered:n} || Recoveries: {percent_recovered:n}% ',
-                    'xaxis':{
-                        'title':'Date'
-                    },
-                    'yaxis':{
-                         'title':'Total Recovered'
+        dcc.Graph(
+                id='death-graph',
+                figure={
+                    'data': [
+                        {'x': date_objects, 'y': deaths_list, 'type': 'scatter'},
+                    ],
+                    'layout': {
+                        'title': f'Deaths in {country_name_final_representation} || Total deaths: {total_deaths:n} || Deaths: {percent_death:n}% ',
+                        'xaxis':{
+                            'title':'Date'
+                        },
+                        'yaxis':{
+                            'title':'Total Deaths'
+                        }
                     }
                 }
-            }
-        )
-])
+            ),
 
+        dcc.Graph(
+                id='recovered-graph',
+                figure={
+                    'data': [
+                        {'x': date_objects, 'y': recovered_list, 'type': 'scatter'},
+                    ],
+                    'layout': {
+                        'title': f'Recoveries in {country_name_final_representation} || Total recovered:  {total_recovered:n} || Recoveries: {percent_recovered:n}% ',
+                        'xaxis':{
+                            'title':'Date'
+                        },
+                        'yaxis':{
+                            'title':'Total Recovered'
+                        }
+                    }
+                }
+            )
+    ])
 
-
-
-
-@app.callback(Output('output', 'children'),
+    @app.callback(Output('output', 'children'),
               [Input('dropdown', 'value')])
 
-def update_output_1(value):
-    f = open("demofile2.txt", "w")
-    f.write(value)
-    f.close()
+    def update_output_1(value):
+        f = open("demofile2.txt", "w")
+        f.write(value)
+        f.close()
+
+
+
+html_view()
+
 
 
 
