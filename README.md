@@ -5,4 +5,4 @@ Google Colab iPython Notebook link: https://colab.research.google.com/drive/1iXV
 
 The Dash-Plotly folder contains the web dashboard code.
 
-Click on 'Open in Playground' to execute the notebook.
+Click "Open in Playground" to execute the notebook.
